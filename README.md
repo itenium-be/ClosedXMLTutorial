@@ -26,23 +26,23 @@ EPPlus Comparison
 
 | EPPlus                           | ClosedXML                     |
 |----------------------------------|-------------------------------|
-| Basics
+| **Basics**
 | new ExcelPackage()               | new XLWorkbook()
 | Workbook.Worksheets.Add("str")   | AddWorksheet("str")
-|
-| With Sheet
+|                                  |
+| **With Sheet**                   |
 | Cells[1, 1]                      | Cell(1, 1)
 | Cell["A2"]                       | Cell("A2")
 | Formula                          | FormulaA1
 | Text                             | GetString()
-|
-| Styling with Cell.Style
+|                                  |
+| **Styling with Cell.Style**
 | Font.Color.SetColor(Color.Ivory)          | Style.Font.SetFontColor(XLColor.Ivory)
 |                                           | Style.Font.FontColor = XLColor.Ivory
 | Fill.PatternType = ExcelFillStyle.Solid   | Fill.SetPatternType(XLFillPatternValues.Solid)
 | Fill.BackgroundColor.SetColor(Color.Navy) | Fill.SetBackgroundColor(XLColor.Navy)
-|
-| Misc
+|                                  |
+| **Misc**                         |
 | LoadFromCollection               | InsertTable
 | Cells.AutoFitColumns()           | Columns().AdjustToContents()
 
