@@ -5,7 +5,7 @@ Back in 2017 I created a blog series on EPPlus
 [Create Excels with C# and EPPlus: A tutorial](https://itenium.be/blog/dotnet/create-xlsx-excel-with-epplus-csharp/)
 because it used to be such a great project. But then it went commercial 😀
 
-So time to create a new blog series, now using the MIT licensed OpenXML!
+So time to create a new blog series, now using the MIT licensed ClosedXML!
 
 [ClosedXML/ClosedXML](https://github.com/ClosedXML/ClosedXML) ClosedXML is a .NET library for reading, manipulating and writing Excel 2007+ (.xlsx, .xlsm) files. It aims to provide an intuitive and user-friendly interface to dealing with the underlying OpenXML API. (⭐ 5.2k)
 
@@ -33,14 +33,31 @@ EPPlus Comparison
 | **With Sheet**                   |
 | Cells[1, 1]                      | Cell(1, 1)
 | Cell["A2"]                       | Cell("A2")
+| Cells["A2:C5"]                   | Range("A2:C5")
+| Cells["B2,D2"]                   | Cells("B2,D2")
+| Dimension                        | LastRowUsed() & LastColumnUsed()
+|                                  | Or RangeUsed()
+| View.FreezePanes                 | SheetView.FreezeRows & FreezeColumns
+| View.ShowGridLines               | ShowGridLines
+| View.ShowHeaders                 | ShowRowColHeaders
+|                                  |
+| **With Cell(s)**
+| Address                          | Address.ToString()
+| Start.Column                     | Address.ColumnNumber
 | Formula                          | FormulaA1
-| Text                             | GetString()
+| Text                             | GetString() & GetFormattedString()
+| Hyperlink = new Uri()            | SetHyperlink(new XLHyperlink())
+| Merge = true                     | Merge()
 |                                  |
 | **Styling with Cell.Style**
 | Font.Color.SetColor(Color.Ivory)          | Style.Font.SetFontColor(XLColor.Ivory)
 |                                           | Style.Font.FontColor = XLColor.Ivory
 | Fill.PatternType = ExcelFillStyle.Solid   | Fill.SetPatternType(XLFillPatternValues.Solid)
 | Fill.BackgroundColor.SetColor(Color.Navy) | Fill.SetBackgroundColor(XLColor.Navy)
+| Border.BorderAround()            | Border.OutsideBorder
+| ShrinkToFit = true               | Alignment.ShrinkToFit = true
+| WrapText = true                  | Alignment.WrapText = true
+| HorizontalAlignment              | Alignment.Horizontal
 |                                  |
 | **Misc**                         |
 | LoadFromCollection               | InsertTable
