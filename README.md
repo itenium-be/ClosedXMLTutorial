@@ -34,7 +34,7 @@ EPPlus Comparison
 | Cells[1, 1]                      | Cell(1, 1)
 | Cell["A2"]                       | Cell("A2")
 | Cells["A2:C5"]                   | Range("A2:C5")
-| Cells["B2,D2"]                   | Cells("B2,D2")
+| Cells["B2,D2"]                   | Cells("B2,D2") or Ranges("B2,D2")
 | Dimension                        | LastRowUsed() & LastColumnUsed()
 |                                  | Or RangeUsed()
 | View.FreezePanes                 | SheetView.Freeze
@@ -67,6 +67,20 @@ EPPlus Comparison
 | **Misc**                         |
 | LoadFromCollection               | InsertTable / InsertData
 | Cells.AutoFitColumns()           | ColumnsUsed().AdjustToContents()
+
+
+Outdated Docs
+-------------
+
+In case there is interest from the maintainer to update the wiki,
+these are the things that are out of date:
+
+- Not using `using` in the examples.
+- [DataValidation](https://github.com/closedxml/closedxml/wiki/Data-Validation): DataValidation vs CreateDataValidation() + Bug: `.Time` is not working
+- [Fonts](https://github.com/closedxml/closedxml/wiki/Styles-Font): `FontFamilyNumbering` doesn't seem to be working
+- [Comments](https://github.com/ClosedXML/ClosedXML/wiki#comments): Comment vs CreateComment()
+- [RichText](https://github.com/closedxml/closedxml/wiki/Using-Rich-Text): Same RichText vs CreateRichText()
+
 
 
 Wish List

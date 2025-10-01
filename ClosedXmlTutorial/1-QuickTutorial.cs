@@ -271,7 +271,7 @@ public class QuickTutorial
 
         // Cells with style
         sheet.Cell("A1").Value = "Bold and proud";
-        sheet.Cell("A1").Style.Font.FontName = "Arial";
+        sheet.Cell("A1").Style.Font.FontName = "Stencil";
         sheet.Cell("A1").Style.Font.Bold = true;
         sheet.Cell("A1").Style.Font.FontColor = XLColor.Green;
 
@@ -290,6 +290,10 @@ public class QuickTutorial
         sheet.Cell("D15").Style.Alignment.WrapText = true;
         sheet.Cell("D15").Value = "A wrap, yummy!";
         sheet.Cell("D16").Value = "No wrap, ouch!";
+
+        // ATTN: These weren't working for me...
+        // sheet.Cell("D16").Style.Font.SetFontFamilyNumbering(XLFontFamilyNumberingValues.Script);
+        // sheet.Cell("D16").Style.Font.FontFamilyNumbering = XLFontFamilyNumberingValues.Script;
 
         // Background color
         sheet.Cell("B5").Style.Fill.BackgroundColor = XLColor.Red;
@@ -370,6 +374,7 @@ public class QuickTutorial
         sheet.ShowRowColHeaders = false;
 
         // Default selected cell when opening
+        sheet.Cell("B6").SetActive();
         sheet.Cell("B6").Select();
 
         var colE = sheet.Column(5);
