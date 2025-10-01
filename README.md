@@ -37,7 +37,8 @@ EPPlus Comparison
 | Cells["B2,D2"]                   | Cells("B2,D2")
 | Dimension                        | LastRowUsed() & LastColumnUsed()
 |                                  | Or RangeUsed()
-| View.FreezePanes                 | SheetView.FreezeRows & FreezeColumns
+| View.FreezePanes                 | SheetView.Freeze
+|                                  | SheetView.FreezeRows & FreezeColumns
 | View.ShowGridLines               | ShowGridLines
 | View.ShowHeaders                 | ShowRowColHeaders
 |                                  |
@@ -47,7 +48,7 @@ EPPlus Comparison
 | Formula                          | FormulaA1
 | Text                             | GetString() & GetFormattedString()
 | Hyperlink = new Uri()            | SetHyperlink(new XLHyperlink())
-| Merge = true                     | Merge()
+| Merge = true                     | Merge() / Unmerge()
 |                                  |
 | **Styling with Cell.Style**
 | Font.Color.SetColor(Color.Ivory)          | Style.Font.SetFontColor(XLColor.Ivory)
@@ -59,9 +60,13 @@ EPPlus Comparison
 | WrapText = true                  | Alignment.WrapText = true
 | HorizontalAlignment              | Alignment.Horizontal
 |                                  |
+| **Formulas**
+| Formula                          | FormulaA1
+| Calculate()                      | RecalculateAllFormulas()
+|
 | **Misc**                         |
-| LoadFromCollection               | InsertTable
-| Cells.AutoFitColumns()           | Columns().AdjustToContents()
+| LoadFromCollection               | InsertTable / InsertData
+| Cells.AutoFitColumns()           | ColumnsUsed().AdjustToContents()
 
 
 Wish List

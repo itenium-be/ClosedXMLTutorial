@@ -124,6 +124,9 @@ public class QuickTutorial
         int lastCol = sheet.ColumnsUsed().Last().ColumnNumber();
         sheet.Range(1, 1, 1, lastCol).SetAutoFilter();
 
+        // Copy entire sheet
+        sheet.CopyTo(workbook, "Copy");
+
         BinDir.Save(workbook, false);
     }
 
@@ -160,8 +163,8 @@ public class QuickTutorial
         Assert.That(twoColumns.RangeAddress.ToString(), Is.EqualTo("A:B"));
 
         // Linq - ClosedXML uses different approach for comments
-        var cellsWithComments = sheet.Range("A1:A5").Cells().Where(cell => cell.HasComment);
-        var cellsWithComments2 = sheet.Cells("A1:A5").Where(cell => cell.HasComment);
+        var cellsWithComments = sheet.Range("A1:A5").Cells(cell => cell.HasComment);
+        var cellsWithComments2 = sheet.Range("A1:A5").CellsUsed(cell => cell.HasComment);
 
         // Dimensions used
         Assert.That(sheet.LastRowUsed(), Is.Null);
@@ -349,7 +352,7 @@ public class QuickTutorial
 
 
         sheet.ColumnsUsed().AdjustToContents();
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 
     [Test]
@@ -375,7 +378,7 @@ public class QuickTutorial
         // Hide column A
         sheet.Column(1).Hide();
 
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 
 
@@ -387,7 +390,7 @@ public class QuickTutorial
 
         CreateSheet(true);
         CreateSheet(false);
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
 
         void CreateSheet(bool showOutlineSymbols)
         {
