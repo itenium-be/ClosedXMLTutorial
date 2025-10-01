@@ -311,7 +311,7 @@ public class FormulasReference
 
         sheet.Column(1).Width = 60;
         sheet.Column(2).Width = 20;
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 
     [Test]
@@ -446,8 +446,47 @@ public class FormulasReference
         int excelWorkday = (int)System.Math.Ceiling((end - new DateTime(1899, 12, 30)).TotalDays);
         Assert.That(sheet.Cell("B23").Value, Is.EqualTo(excelWorkday));
 
+        // DATEDIF examples
+        sheet.Cell("A24").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"Y\")";
+        sheet.Cell("B24").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"Y\")";
+        sheet.Assert("B24", Is.EqualTo(1));
+
+        sheet.Cell("A25").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"M\")";
+        sheet.Cell("B25").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"M\")";
+        sheet.Assert("B25", Is.EqualTo(5 + 12));
+
+        sheet.Cell("A26").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"D\")";
+        sheet.Cell("B26").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"D\")";
+        sheet.Assert("B26", Is.EqualTo(531));
+
+        // Ignore Year & Month
+        sheet.Cell("A27").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"MD\")";
+        sheet.Cell("B27").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"MD\")";
+        sheet.Assert("B27", Is.EqualTo(14));
+
+        // Ignore Years
+        sheet.Cell("A28").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"YM\")";
+        sheet.Cell("B28").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"YM\")";
+        sheet.Assert("B28", Is.EqualTo(5));
+
+        // Ignore Years
+        sheet.Cell("A29").Value = "=DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"YD\")";
+        sheet.Cell("B29").FormulaA1 = "DATEDIF(DATE(2023,1,1), DATE(2024,6,15), \"YD\")";
+        sheet.Assert("B29", Is.EqualTo(165));
+
+        // NETWORKDAYS
+        sheet.Cell("A30").Value = "=NETWORKDAYS(DATE(2024,6,1), DATE(2024,6,15))";
+        sheet.Cell("B30").FormulaA1 = "NETWORKDAYS(DATE(2024,6,1), DATE(2024,6,15))";
+        sheet.Assert("B30", Is.EqualTo(10));
+
+        // NETWORKDAYS with a holiday (2024-06-05)
+        sheet.Cell("A31").Value = "=NETWORKDAYS(DATE(2024,6,1), DATE(2024,6,15), DATE(2024,6,5))";
+        sheet.Cell("B31").FormulaA1 = "NETWORKDAYS(DATE(2024,6,1), DATE(2024,6,15), DATE(2024,6,5))";
+        sheet.Assert("B31", Is.EqualTo(9));
+
         sheet.Column(1).Width = 50;
         sheet.Column(2).Width = 20;
+        BinDir.Save(workbook, false);
         BinDir.Save(workbook, false);
     }
 }
