@@ -267,6 +267,92 @@ public class FormulasReference
     [Test]
     public void DateAndTime()
     {
-        
+        using var workbook = new XLWorkbook();
+        var sheet = workbook.Worksheets.Add("DateAndTime");
+
+        var dt = new DateTime(2024, 6, 15, 14, 30, 45);
+        sheet.Cell("A1").Value = dt;
+
+        sheet.Cell("A3").Value = "YEAR(A1)";
+        sheet.Cell("B3").FormulaA1 = "YEAR(A1)";
+        sheet.Assert("B3", Is.EqualTo(dt.Year));
+
+        sheet.Cell("A4").Value = "MONTH(A1)";
+        sheet.Cell("B4").FormulaA1 = "MONTH(A1)";
+        sheet.Assert("B4", Is.EqualTo(dt.Month));
+
+        sheet.Cell("A5").Value = "DAY(A1)";
+        sheet.Cell("B5").FormulaA1 = "DAY(A1)";
+        sheet.Assert("B5", Is.EqualTo(dt.Day));
+
+        sheet.Cell("A6").Value = "HOUR(A1)";
+        sheet.Cell("B6").FormulaA1 = "HOUR(A1)";
+        sheet.Assert("B6", Is.EqualTo(dt.Hour));
+
+        sheet.Cell("A7").Value = "MINUTE(A1)";
+        sheet.Cell("B7").FormulaA1 = "MINUTE(A1)";
+        sheet.Assert("B7", Is.EqualTo(dt.Minute));
+
+        sheet.Cell("A8").Value = "SECOND(A1)";
+        sheet.Cell("B8").FormulaA1 = "SECOND(A1)";
+        sheet.Assert("B8", Is.EqualTo(dt.Second));
+
+        // DATE(year, month, day)
+        sheet.Cell("A9").Value = "DATE(2024, 6, 1)";
+        sheet.Cell("B9").FormulaA1 = "DATE(2024, 6, 1)";
+        var leDate = sheet.Cell("B9").Value;
+        int leExpectedDate = (int)System.Math.Ceiling((new DateTime(2024, 6, 1) - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(leDate, Is.EqualTo(leExpectedDate));
+
+        // TODAY
+        sheet.Cell("A10").Value = "TODAY()";
+        sheet.Cell("B10").Style.DateFormat.Format = "yyyy-mm-dd";
+        sheet.Cell("B10").FormulaA1 = "TODAY()";
+        var today = sheet.Cell("B10").Value;
+        int excelToday = (int)System.Math.Ceiling((DateTime.Today - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(today, Is.EqualTo(excelToday));
+        Assert.That(sheet.Cell("B10").GetFormattedString(), Is.EqualTo(DateTime.Today.ToString("yyyy-MM-dd")));
+
+        // NOW
+        sheet.Cell("A11").Value = "NOW()";
+        sheet.Cell("B11").FormulaA1 = "NOW()";
+        double now = sheet.Cell("B11").GetDouble();
+        double excelNow = (DateTime.Now - new DateTime(1899, 12, 30)).TotalDays;
+        Assert.That(now, Is.EqualTo(excelNow).Within(0.001));
+
+        // TIME
+        sheet.Cell("D11").Value = "TIME(14, 30, 45)";
+        sheet.Column("D").Width = 20;
+        sheet.Cell("E11").FormulaA1 = "TIME(14, 30, 45)";
+        sheet.Cell("E11").Style.DateFormat.NumberFormatId = (int)XLPredefinedFormat.DateTime.Hour24MinutesSeconds;
+
+        // DATEVALUE
+        sheet.Cell("A12").Value = "2024-06-01";
+        sheet.Cell("B12").Value = "DATEVALUE(A12)";
+        sheet.Cell("C12").FormulaA1 = "DATEVALUE(A12)";
+        sheet.Assert("C12", Is.EqualTo(45444));
+
+        // WEEKDAY
+        sheet.Cell("A13").Value = "WEEKDAY(A1)";
+        sheet.Cell("B13").FormulaA1 = "WEEKDAY(A1)";
+        sheet.Assert("B13", Is.EqualTo((int)dt.DayOfWeek + 1)); // Excel: Sunday=1
+
+        // WEEKNUM & ISOWEEKNUM
+        sheet.Cell("A14").Value = "WEEKNUM(C12)";
+        sheet.Cell("B14").FormulaA1 = "WEEKNUM(C12)";
+        sheet.Assert("B14", Is.EqualTo(22));
+
+        sheet.Cell("D14").Value = "ISOWEEKNUM(C12)";
+        sheet.Cell("E14").FormulaA1 = "ISOWEEKNUM(C12)";
+        sheet.Assert("E14", Is.EqualTo(22));
+
+        // YEARFRAC
+        sheet.Cell("A15").Value = "YEARFRAC(DATE(2024,1,1), DATE(2024,6,1))";
+        sheet.Cell("B15").FormulaA1 = "YEARFRAC(DATE(2024,1,1), DATE(2024,6,1))";
+        Assert.That(sheet.Cell("B15").GetDouble(), Is.EqualTo(0.416666667).Within(0.0001));
+
+        sheet.Column(1).Width = 50;
+        sheet.Column(2).Width = 20;
+        BinDir.Save(workbook, true);
     }
 }
