@@ -107,7 +107,7 @@ public class FormulasReference
 
         sheet.Column(1).Width = 50;
 
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 
     [Test]
@@ -255,13 +255,63 @@ public class FormulasReference
 
         sheet.Column(1).Width = 50;
 
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 
     [Test]
     public void Logical()
     {
+        using var workbook = new XLWorkbook();
+        var sheet = workbook.Worksheets.Add("Logical");
 
+        // Check if cell is blank (empty or whitespace)
+        sheet.Cell("A1").Value = "=IF(OR(ISBLANK(C1), TRIM(C1)=\"\"), 1, 0)";
+        sheet.Cell("B1").FormulaA1 = "IF(OR(ISBLANK(C1), TRIM(C1)=\"\"), 1, 0)";
+        sheet.Cell("C1").Value = " ";
+        sheet.Assert("B1", Is.EqualTo(1));
+
+        sheet.Cell("A2").Value = "=IF(OR(ISBLANK(C2), TRIM(C2)=\"\"), 1, 0)";
+        sheet.Cell("B2").FormulaA1 = "IF(OR(ISBLANK(C2), TRIM(C2)=\"\"), 1, 0)";
+        sheet.Cell("C2").Value = "Hello";
+        sheet.Assert("B2", Is.EqualTo(0));
+
+        // Check if cell is either value
+        sheet.Cell("A3").Value = "=IF(OR(C3=\"value\", C3=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("B3").FormulaA1 = "IF(OR(C3=\"value\", C3=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("C3").Value = "value";
+        sheet.Assert("B3", Is.EqualTo("value1-2"));
+
+        sheet.Cell("A4").Value = "=IF(OR(C4=\"value\", C4=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("B4").FormulaA1 = "IF(OR(C4=\"value\", C4=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("C4").Value = "value2";
+        sheet.Assert("B4", Is.EqualTo("value1-2"));
+
+        sheet.Cell("A5").Value = "=IF(OR(C5=\"value\", C5=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("B5").FormulaA1 = "IF(OR(C5=\"value\", C5=\"value2\"), \"value1-2\", \"other\")";
+        sheet.Cell("C5").Value = "something else";
+        sheet.Assert("B5", Is.EqualTo("other"));
+
+        // Basic AND/OR/NOT
+        sheet.Cell("A6").Value = "=AND(C6=1, D6=2)";
+        sheet.Cell("B6").FormulaA1 = "AND(C6=1, D6=2)";
+        sheet.Cell("C6").Value = 1;
+        sheet.Cell("D6").Value = 2;
+        sheet.Assert("B6", Is.EqualTo(true));
+
+        sheet.Cell("A7").Value = "=OR(C7=2, D7=2)";
+        sheet.Cell("B7").FormulaA1 = "OR(C7=2, D7=2)";
+        sheet.Cell("C7").Value = 1;
+        sheet.Cell("D7").Value = 2;
+        sheet.Assert("B7", Is.EqualTo(true));
+
+        sheet.Cell("A8").Value = "=NOT(C8=2)";
+        sheet.Cell("B8").FormulaA1 = "NOT(C8=2)";
+        sheet.Cell("C8").Value = 1;
+        sheet.Assert("B8", Is.EqualTo(true));
+
+        sheet.Column(1).Width = 60;
+        sheet.Column(2).Width = 20;
+        BinDir.Save(workbook, true);
     }
 
     [Test]
@@ -398,6 +448,6 @@ public class FormulasReference
 
         sheet.Column(1).Width = 50;
         sheet.Column(2).Width = 20;
-        BinDir.Save(workbook, true);
+        BinDir.Save(workbook, false);
     }
 }
