@@ -174,4 +174,37 @@ public class FormulasAndDataValidation
         sheet.ColumnsUsed().AdjustToContents();
         BinDir.Save(workbook, false);
     }
+
+    [Test]
+    public void DataValidation_Wiki()
+    {
+        using var wb = new XLWorkbook();
+        var ws = wb.Worksheets.Add("Data Validation");
+
+        ws.Cell(1, 1).CreateDataValidation().Decimal.Between(1, 5);
+
+        var dv1 = ws.Range("A2:A3").CreateDataValidation();
+        dv1.WholeNumber.EqualTo(2);
+        dv1.ErrorStyle = XLErrorStyle.Warning;
+        dv1.ErrorTitle = "Number out of range";
+        dv1.ErrorMessage = "This cell only allows the number 2.";
+
+
+        var dv2 = ws.Cell("A4").CreateDataValidation();
+        dv2.Date.EqualOrGreaterThan(new DateTime(2000, 1, 1));
+        dv2.InputTitle = "Can't party like it's 1999.";
+        dv2.InputMessage = "Please enter a date in this century.";
+
+
+        ws.Cell("C1").Value = "Yes";
+        ws.Cell("C2").Value = "No";
+        ws.Cell("A5").CreateDataValidation().List(ws.Range("C1:C2"));
+
+        // Pass a string in this format: "Option1,Option2,Option3" (including the surrounding quotes)
+        var options = new List<string> { "Option1", "Option2", "Option3" };
+        var validOptions = $"\"{string.Join(",", options)}\"";
+        ws.Cell("A6").CreateDataValidation().List(validOptions, true);
+
+        BinDir.Save(wb, false);
+    }
 }
