@@ -351,6 +351,51 @@ public class FormulasReference
         sheet.Cell("B15").FormulaA1 = "YEARFRAC(DATE(2024,1,1), DATE(2024,6,1))";
         Assert.That(sheet.Cell("B15").GetDouble(), Is.EqualTo(0.416666667).Within(0.0001));
 
+        // TODAY() - 2
+        sheet.Cell("A16").Value = "TODAY() - 2";
+        sheet.Cell("B16").FormulaA1 = "TODAY() - 2";
+        int excelToday2 = (int)System.Math.Ceiling((DateTime.Today - new DateTime(1899, 12, 30)).TotalDays) - 2;
+        Assert.That(sheet.Cell("B16").Value, Is.EqualTo(excelToday2));
+
+        // NOW() + "2:00"
+        sheet.Cell("A17").Value = "NOW() + TIME(2,0,0)";
+        sheet.Cell("B17").FormulaA1 = "NOW() + TIME(2,0,0)";
+        double nowPlus2h = (DateTime.Now.AddHours(2) - new DateTime(1899, 12, 30)).TotalDays;
+        Assert.That(sheet.Cell("B17").GetDouble(), Is.EqualTo(nowPlus2h).Within(0.001));
+
+        // DAYS360(date1, date2)
+        sheet.Cell("A18").Value = "DAYS360(DATE(2024,1,1), DATE(2024,6,1))";
+        sheet.Cell("B18").FormulaA1 = "DAYS360(DATE(2024,1,1), DATE(2024,6,1))";
+        Assert.That(sheet.Cell("B18").GetDouble(), Is.EqualTo(150));
+
+        // EDATE(date, nrOfMonths)
+        sheet.Cell("A20").Value = "EDATE(DATE(2024,6,1), 2)";
+        sheet.Cell("B20").FormulaA1 = "EDATE(DATE(2024,6,1), 2)";
+        var edate = new DateTime(2024, 6, 1).AddMonths(2);
+        int excelEDate = (int)System.Math.Ceiling((edate - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(sheet.Cell("B20").Value, Is.EqualTo(excelEDate));
+
+        // EOMONTH(date, 0)
+        sheet.Cell("A21").Value = "EOMONTH(DATE(2024,6,1), 0)";
+        sheet.Cell("B21").FormulaA1 = "EOMONTH(DATE(2024,6,1), 0)";
+        var eomonth0 = new DateTime(2024, 6, 30);
+        int excelEOMonth0 = (int)System.Math.Ceiling((eomonth0 - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(sheet.Cell("B21").Value, Is.EqualTo(excelEOMonth0));
+
+        // EOMONTH(date, -2)
+        sheet.Cell("A22").Value = "EOMONTH(DATE(2024,6,1), -2)";
+        sheet.Cell("B22").FormulaA1 = "EOMONTH(DATE(2024,6,1), -2)";
+        var eomonthMinus2 = new DateTime(2024, 4, 30);
+        int excelEOMonthMinus2 = (int)System.Math.Ceiling((eomonthMinus2 - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(sheet.Cell("B22").Value, Is.EqualTo(excelEOMonthMinus2));
+
+        // WORKDAY(date, workDaysToAdd, holidaysRange)
+        sheet.Cell("A23").Value = "WORKDAY(DATE(2024,6,1), 10, DATE(2024,6,5))";
+        sheet.Cell("B23").FormulaA1 = "WORKDAY(DATE(2024,6,1), 10, DATE(2024,6,5))";
+        var end = new DateTime(2024, 6, 17); // 1/6 + 10 days + skip 5/6 (holiday) + skip weekends = 17/6
+        int excelWorkday = (int)System.Math.Ceiling((end - new DateTime(1899, 12, 30)).TotalDays);
+        Assert.That(sheet.Cell("B23").Value, Is.EqualTo(excelWorkday));
+
         sheet.Column(1).Width = 50;
         sheet.Column(2).Width = 20;
         BinDir.Save(workbook, true);
