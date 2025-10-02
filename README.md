@@ -63,7 +63,7 @@ EPPlus Comparison
 | **Formulas**
 | Formula                          | FormulaA1
 | Calculate()                      | RecalculateAllFormulas()
-|
+|                                  |
 | **Misc**                         |
 | LoadFromCollection               | InsertTable / InsertData
 | Cells.AutoFitColumns()           | ColumnsUsed().AdjustToContents()
