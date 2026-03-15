@@ -14,6 +14,13 @@ public class Tables
         using var wb = new XLWorkbook();
         var ws = wb.Worksheets.Add("Table");
 
+        // Add headers
+        ws.Cell("B3").Value = "Name";
+        ws.Cell("C3").Value = "DOB";
+        ws.Cell("D3").Value = "Income";
+        ws.Cell("E3").Value = "Department";
+        ws.Cell("F3").Value = "Active";
+
         var rngData = ws.Range("B3:F6");
         var excelTable = rngData.CreateTable();
 
