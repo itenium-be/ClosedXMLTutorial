@@ -166,7 +166,9 @@ public class FormulasAndDataValidation
 
         // Time validation
         // ATTN: While it was able to save it, I couldn't open it in Excel
+        //sheet.Cell("C2").Style.DateFormat.SetNumberFormatId((int)XLPredefinedFormat.DateTime.Hour24MinutesSeconds);
         //var timeValidation = sheet.Cell("C2").CreateDataValidation();
+        //timeValidation.AllowedValues = XLAllowedValues.Time; // The timeValidation.Time does this already
         //var timeSpan = new TimeSpan(13, 30, 10);
         //timeValidation.Time.GreaterThan(timeSpan);
         sheet.Cell("C2").Value = "ClosedXML BUG?";
